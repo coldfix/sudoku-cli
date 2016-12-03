@@ -2,6 +2,7 @@
 #define __SUDOKU_H__INCLUDED__
 
 #include <boost/cstdint.hpp>
+#include <boost/operator.hpp>
 
 
 namespace sudoku
@@ -10,6 +11,85 @@ namespace sudoku
     typedef boost::int8_t value;
 
     enum class Difficulty { Easy, Medium, Hard };
+
+
+//--------------------------------------------------
+// indexing
+//--------------------------------------------------
+
+    // tags:
+    enum class coord_tag {
+        box,                // xhyh 00
+        col,                // xhxl 01
+        row,                // yhyl 10
+        field               // xlyl 11
+
+        // xh xl yl yh
+        // xh yh yl xl
+    };
+    //              hi-bit      lo-bit  (of coord_tag)
+    //   h  l          0  1
+    // x xh xl      0 00 01     1 01 11
+    // y yh yl      1 10 11     0 00 10
+    //                             0  1
+
+    template <coord_tag tag>
+    class Coordinate
+        : boost::incrementable<Coordinate<T>>
+    {
+        coord c;
+        coord n,nl;
+    public:
+        struct transpose { };
+
+        typedef Coordinate<coord_tag(3 & ~int(tag))> ComplementCoord;
+        typedef Coordinate<coord_tag(3 & (2 + int(tag)))> CrossCoord;
+
+
+        Coordinate(coord _n, coord _nl, coord h, coord l)
+            : c(_c), n(_n), nl(_nl)
+        {
+        }
+
+        Coordinate(coord _n, coord _nl, coord c)
+            : c(_c), n(_n), nl(_nl)
+        {
+        }
+
+        Coordinate(Size s)
+        {
+        }
+
+        Coordinate(Index i)
+        {
+        }
+
+        Coordinate(CrossCoord a, CrossCoord::ComplementCoord b)
+        {
+        }
+
+        Coordinate(CrossCoord::Complement a, CrossCoord b)
+        {
+        }
+
+        coord high() const { return c / nl; }
+        coord low() const { return c % nl; }
+        Coordinate& operator ++ () { ++c; return *this; }
+        explicit operator bool() const { return c < n; };
+    };
+
+    typedef Coordinate<box_tag> Box;
+    typedef Coordinate<field_tag> Field;
+    typedef Coordinate<row_tag> Row;
+    typedef Coordinate<col_tag> Col;
+
+    class Index
+    {
+        coord c,
+              bh[2],
+              row, total;
+
+    };
 
 
 /*
