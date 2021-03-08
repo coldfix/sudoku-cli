@@ -5,6 +5,7 @@
 #include <functional>
 #include "solver.h"
 
+#include <coz.h>
 
 // to do:
 // > update queue [ring buffer] (to avoid multiple updating)
@@ -202,6 +203,7 @@ void Solver::discard(coord a, value val)
 
 void Solver::deepthoughts(bool smart, bool clever, bool test_alldiff)
 {
+    // COZ_BEGIN("deepthoughts");
     while (dirty() && !solved() && !error()) {
         dirty_ = false;
         if (smart)
@@ -213,6 +215,7 @@ void Solver::deepthoughts(bool smart, bool clever, bool test_alldiff)
     }
     if (test_alldiff && !solved() && !error() && !alldiff_constraints())
         error_ = true;
+    // COZ_END("deepthoughts");
 }
 
 /*
@@ -227,6 +230,7 @@ void Solver::deepthoughts(bool smart, bool clever, bool test_alldiff)
 
 void Solver::thinksmart()
 {
+    // COZ_BEGIN("thinksmart");
     smart_ = true;
     for (coord a = 0; a < area() && !dirty(); a++) {            // search for unique values
         if (solved(a))
@@ -270,6 +274,7 @@ void Solver::thinksmart()
     if (dirty()){
         // .. debug count.. ?
     }
+    // COZ_END("thinksmart");
 }
 
 
@@ -286,6 +291,7 @@ void Solver::thinksmart()
 
 void Solver::thinkclever()
 {
+    // COZ_BEGIN("thinkclever");
     clever_ = true;
     for (value v = min_value(); v <= max_value(); v++) {        //search vals that are possible in only
         bool *possible = gourmets(v);
@@ -394,6 +400,7 @@ void Solver::thinkclever()
                 return;
         }
     }
+    // COZ_END("thinkclever");
 }
 
 /*

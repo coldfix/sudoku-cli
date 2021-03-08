@@ -8,6 +8,7 @@
 #include "generator.h"
 #include "solver.h"
 
+#include <coz.h>
 
 
 namespace sudoku
@@ -152,6 +153,7 @@ void Generator::set(const Size& size)
 
 bool Generator::obfuscate(Difficulty difficulty, int min_fill, int max_fill, int max_depth)
 {
+    // COZ_BEGIN("obfuscate");
     const Sudoku& sudoku = m_sudoku;
     Size size = m_sudoku.size();
 
@@ -202,12 +204,14 @@ bool Generator::obfuscate(Difficulty difficulty, int min_fill, int max_fill, int
     }
 
     m_sudoku = riddle;
+    // COZ_END("obfuscate");
     return true;
 }
 
 
 bool Generator::fill(int max_backtrack)
 {
+    // COZ_BEGIN("fill");
     Solver solve;
     Size size = m_sudoku.size();
     bool empty;
@@ -240,6 +244,7 @@ bool Generator::fill(int max_backtrack)
     } while (solve.toohard() && empty);
 
     m_sudoku = solve.get();
+    // COZ_END("fill");
     return true;
 }
 

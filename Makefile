@@ -8,8 +8,8 @@ OBJ = main.o solver.o generator.o
 # Need g++-4.5 or newer
 CC = g++
 
-CFLAGS = -Wall -O3 -std=c++11
-LFLAGS = -Wall -O3
+CFLAGS = -Wall -g
+LFLAGS = -Wall -g -ldl
 
 
 # Build targets:

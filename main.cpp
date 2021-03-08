@@ -6,6 +6,8 @@ using namespace std;
 #include "solver.h"
 #include "generator.h"
 
+#include <coz.h>
+
 
 bool isdigit(char c)
 {
@@ -58,6 +60,8 @@ int main(int argc, char* argv[])
         }
     }
 
+    for (int i = 0; i < 500; ++i) {
+    // COZ_BEGIN("main");
 
     sudoku::Size size = sudoku::Size(dim_x, dim_y);
     sudoku::Generator generator(size);
@@ -75,24 +79,28 @@ int main(int argc, char* argv[])
     //cout << size.bx() << ' ' << size.by() << '\n';
 
     for (int y = 0; y < size.line(); y++) {
-        if (y && y % size.fy() == 0)
-            cout << '\n';
+        // if (y && y % size.fy() == 0)
+        //     cout << '\n';
 
         for (int x = 0; x < size.line(); x++) {
-            if (x)
-                cout << (x % size.fx() ? " " : "  ");
+            // if (x)
+            //     cout << (x % size.fx() ? " " : "  ");
 
             std::string number;
             if (printsolution && riddle.get(x, y) == 0)
                 number += '~';
             number += formatInt((int) print.get(x, y));
 
-            cout << fill(number, width);
+            // cout << fill(number, width);
         }
 
-        cout << '\n';
+        // cout << '\n';
     }
-    cout << flush;
+    // cout << flush;
+
+    // COZ_END("main");
+    COZ_PROGRESS;
+    }
 
     return 0;
 }
